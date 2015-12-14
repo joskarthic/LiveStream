@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>schedule</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <link rel="stylesheet" type="text/css" href="css/city.css"/>
+        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="jquery_mobile/jquery.mobile-1.4.4.min.css"/>
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="jquery_mobile/jquery.mobile-1.4.4.min.js"></script>
+        <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script src="js/cordova.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/video.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(document).ready(function() {
+              $.mobile.loading( "show", {theme: 'a'});
+              $.ajax({
+                    type: "POST",
+                    dataType : "json",
+                    url : "http://rainbowtv.cherritech.us/application/ios/json14s2.php?action=live",
+
+                    success: function(res){
+                        respon =   res.main_list[0]["categories"][0]["programs"][0]["video_url"];
+                        htmlcont = '';
+
+                        htmlcont += '<a href="#" onclick="window.plugins.videoPlayer.play(\''+respon+'\');"><img src="http://rainbowtv.cherritech.us/android/rainbow_02.png"></a>';
+
+                        $('#ban_img12').html(htmlcont);
+
+                        }
+                    });
+             
+
+            /*****************************/
+
+            
+                    $.ajax({
+                    type: "POST",
+                    dataType : "json",
+                    url : "http://roku.cherritech.com/madhatv/android/rokujson1.php?action=Schedule",
+
+                    success: function(res){
+                       response =   res.main_list[0]["categories"][0]["programs"];
+                        result = '';
+
+                      $.each(response, function(key, val) {
+                     
+                       result += '<li><a href="#">'+
+                            '<div class="event_li_div">'+
+                                '<div class="event_li_txt">'+
+                                    '<p class="event_head drim">'+val.program_name+'</p>'+
+                                    '<p class="para drim"><span><i class="fa fa-calendar"></i></span>'+val.date+'</p>'+
+                                  '</div>'+
+                                '</div>'+
+                            '</a>'+
+                        '</li>';
+                       });
+
+                        $('#rain_ul').html(result);
+                        //$('.heading').html(heading);
+                        $.mobile.loading( 'hide');
+                        },error:function (xhr, ajaxOptions, thrownError){
+					    	alert(xhr);
+					    	alert(ajaxOptions);
+					    	alert(thrownError);
+					    }
+                    });
+                });
+
+        </script>
+        <style>
+            .main_div{margin-top: 201px !important;}
+            .event_li_txt {padding-left:10px}
+        </style>
+    </head>
+    <body class="ui-mobile-viewport">
+        <div data-role="page">
+            <!-- settings side panel -->
+            <div data-role="panel" data-position="left" data-position-fixed="true" id="settings" data-display="overlay" data-swipe-close="true">
+                <div class="panel_container">
+                    <div class="pan_space"></div>
+                    <ul class="settings_ul">
+                        <li><a href="index.html" data-ajax="false"><div>Live Tv</div></a></li>
+                        <li><a href="video.html" data-ajax="false"><div>Video on Demand</div></a></li>
+                        <li><a href="#" data-ajax="false" data-rel="close"><div  class="taped">Schedule</div></a></li>
+                        <li><a href="#"><div>Give</div></a></li>
+                        <li><a href="#"><div>Shop</div></a></li>
+                        <li><a href="about.html" data-ajax="false"><div>About Us</div></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div data-role="header" data-position="fixed" id="header" data-tap-toggle="false">
+                <div data-role="navbar" class="ui-navbar ui-mini" role="navigation">
+                    <ul class="ui-grid-b">
+                        <li class="ui-block-a head_small_block"><a href="#settings"  id="ev_close" data-shadow="false"  class="ui-btn ui-btn-inline ui-btn-up-d"><div class="header_icon"><i class="fa fa-bars fa-2x"></i></div></a></li>
+                        <li class="ui-block-b head_center_block"><div class="heading" id="heading"><img src="images/madha.png"/></div></li>
+                        <li class="ui-block-c head_small_block" id="rot">
+                            <!--a href="#" id="flip" data-ajax="false" data-corners="false" data-shadow="false"  data-wrapperels="span"  data-theme="d" data-inline="true" class="ui-btn ui-btn-inline ui-btn-up-d">
+                                <div class="header_icon">
+                                    <i class="fa fa-filter fa-2x"></i>
+                                </div>
+                            </a-->
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <section data-role="content">
+                 <div class="gridss">
+                    <div class="slider" id="slider">
+                        <a href="#">
+                            <div class="main_box">
+                            <div class="main_sub" id="ban_img">
+                            <a href="#" onclick="window.plugins.videoPlayer.play('http://128.199.80.83:1935/madhatv/myStream_360p/playlist.m3u8');"><img src="images/madhaLive.png"></a>
+                            </div>
+                            <div class="strip"><span>Schedule</span></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                     <div class="main_div">
+                        <ul id="rain_ul"></ul>
+                    </div>
+            </section>
+        </div>
+    </body>
+</html>
